@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <AvaloniaVersion>AvaloniaVersionTemplateParameter</AvaloniaVersion>
+    <ArtifactsPath>$(MSBuildThisFileDirectory).artifacts</ArtifactsPath>
+  </PropertyGroup>
+</Project>

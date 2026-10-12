@@ -1,0 +1,184 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "AvaloniaUI",
+  "classifications": [ "Desktop", "Xaml", "Avalonia", "Browser", "Mobile", "Android", "iOS" ],
+  "description": "A cross-platform Avalonia UI Application using the MVVM pattern targeting Desktop, Mobile and Browser with WebAssembly",
+  "groupidentity": "Avalonia.App.Cs.CrossPlatform",
+  "identity": "Avalonia.App.CsCrossPlatform",
+  "name": "Avalonia C#-Only Cross Platform Application",
+  "preferNameDirectory": true,
+  "shortName": "avalonia.csxplat",
+  "sourceName": "AvaloniaTest",
+  "defaultName": "AvaloniaCsApplication",
+  "tags": {
+    "language": "C#",
+    "type": "solution",
+    "editorTreatAs": "solution"
+  },
+  "symbols": {
+    "Framework": {
+      "type": "parameter",
+      "description": "The target framework for the project.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "net10.0",
+          "description": "Target net10.0"
+        }
+      ],
+      "replaces": "FrameworkParameter",
+      "defaultValue": "net10.0"
+    },
+    "MVVMToolkit": {
+      "type": "parameter",
+      "description": "MVVM toolkit to use in the template.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "ReactiveUI",
+          "description": "Choose ReactiveUI as MVVM toolkit in the template."
+        },
+        {
+          "choice": "CommunityToolkit",
+          "description": "Choose CommunityToolkit as MVVM toolkit in the template."
+        }
+      ],
+      "defaultValue": "CommunityToolkit"
+    },
+    "MainViewPageType": {
+      "type": "parameter",
+      "displayName": "Main View Page Type",
+      "description": "The type of main view page to create.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "None",
+          "description": "Create the main view as a UserControl"
+        },
+        {
+          "choice": "ContentPage",
+          "description": "Create the main view as a ContentPage"
+        },
+        {
+          "choice": "TabbedPage",
+          "description": "Create the main view as a TabbedPage"
+        },
+        {
+          "choice": "DrawerPage",
+          "description": "Create the main view as a DrawerPage with a child NavigationPage"
+        },
+        {
+          "choice": "NavigationPage",
+          "description": "Create the main view as a NavigationPage"
+        }
+      ],
+      "defaultValue": "None"
+    },
+    "ReactiveUIToolkitChosen": {
+      "type": "computed",
+      "value": "(MVVMToolkit == \"ReactiveUI\")"
+    },
+    "CommunityToolkitChosen": {
+      "type": "computed",
+      "value": "(MVVMToolkit == \"CommunityToolkit\")"
+    },
+    "DefaultMainPageChosen": {
+      "type": "computed",
+      "value": "(MainViewPageType == \"None\")"
+    },
+    "ContentMainPageChosen": {
+      "type": "computed",
+      "value": "(MainViewPageType == \"ContentPage\")"
+    },
+    "TabbedMainPageChosen": {
+      "type": "computed",
+      "value": "(MainViewPageType == \"TabbedPage\")"
+    },
+    "DrawerMainPageChosen": {
+      "type": "computed",
+      "value": "(MainViewPageType == \"DrawerPage\")"
+    },
+    "NavigationMainPageChosen": {
+      "type": "computed",
+      "value": "(MainViewPageType == \"NavigationPage\")"
+    },
+    "AvaloniaVersion": {
+      "type": "parameter",
+      "description": "The target version of Avalonia NuGet packages.",
+      "datatype": "text",
+      "replaces": "AvaloniaVersionTemplateParameter",
+      "defaultValue": "12.1.3"
+    },
+    "UseCentralPackageManagement": {
+      "type": "parameter",
+      "description": "Defines if your app will use Central Package Management (CPM). If disabled, Directory.Build.props will be created with shared Avalonia version.",
+      "datatype": "bool",
+      "displayName": "Use Central Package Management (CPM)",
+      "defaultValue": "true"
+    },
+    "HostIdentifier": {
+      "type": "bind",
+      "binding": "HostIdentifier"
+    }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(DefaultMainPageChosen || ContentMainPageChosen || TabbedMainPageChosen)",
+          "exclude": [
+            "AvaloniaTest/ViewModels/HomeViewModel.cs",
+            "AvaloniaTest/ViewModels/SettingsViewModel.cs"
+          ]
+        },
+        {
+          "condition": "(!NavigationMainPageChosen)",
+          "exclude": [
+            "AvaloniaTest/Views/HomeView.cs",
+            "AvaloniaTest/Views/SettingsView.cs"
+          ]
+        },
+        {
+          "condition": "(UseCentralPackageManagement)",
+          "exclude": [
+            "Directory.Build.props"
+          ]
+        },
+        {
+          "condition": "(!UseCentralPackageManagement)",
+          "exclude": [
+            "Directory.Packages.props"
+          ]
+        }
+      ]
+    }
+  ],
+  "primaryOutputs": [
+    { "path": "AvaloniaTest/AvaloniaTest.csproj" },
+    { "path": "AvaloniaTest.Android/AvaloniaTest.Android.csproj" },
+    { "path": "AvaloniaTest.Desktop/AvaloniaTest.Desktop.csproj" },
+    { "path": "AvaloniaTest.iOS/AvaloniaTest.iOS.csproj" },
+    { "path": "AvaloniaTest.Browser/AvaloniaTest.Browser.csproj" },
+    {
+      "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
+      "path": "AvaloniaTest/ViewModels/MainViewModel.cs"
+    },
+    {
+      "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
+      "path": "AvaloniaTest/Views/MainView.cs"
+    }
+  ],
+  "postActions": [
+    {
+      "id": "editor",
+      "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
+      "description": "Opens MainView and MainViewModel in the editor",
+      "manualInstructions": [],
+      "actionId": "84C0DA21-51C8-4541-9940-6CA19AF04EE6",
+      "args": {
+        "files": "5;6"
+      },
+      "continueOnError": true
+    }
+  ]
+}
